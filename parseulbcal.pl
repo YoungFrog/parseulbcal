@@ -43,6 +43,34 @@ foreach ($tree->find("tr")) {
   $dates{$date} = \[map { $_->as_text() } $_[0]->find("li") ];
 }
 
+sub date2timestamp {
+  my ($date, $time) = @_;
+  my $format;
+  my (@date, @time);
+
+  if ($time) {
+    $format = "<%d-%m-%Y %a. %H:%M>";
+  }
+  else {
+    $time = "12h00"; # noon 
+    $format = "<%d-%m-%Y %a.>";
+  }
+
+  @date = split(/\//,$date);
+  @time = split(/h/,$time);
+
+  my $dt = DateTime->new(
+			 year       => $date[2],
+			 month      => $date[1],
+			 day        => $date[0],
+			 hour       => $time[0],
+			 minute     => $time[1],
+			 second     => 0,
+			 time_zone  => 'local',
+			);
+  return $dt->strftime($format);
+}
+
 print "Hello World!";
 
 
