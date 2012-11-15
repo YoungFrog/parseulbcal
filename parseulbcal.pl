@@ -60,11 +60,11 @@ sub date2timestamp {
   my (@date, @time);
 
   if ($time) {
-    $format = "<%d-%m-%Y %a. %H:%M>";
+    $format = "<%Y-%m-%d %a. %H:%M>";
   }
   else {
     $time = "12h00"; # noon 
-    $format = "<%d-%m-%Y %a.>";
+    $format = "<%Y-%m-%d %a.>";
   }
 
   @date = split(/\//,$date);
