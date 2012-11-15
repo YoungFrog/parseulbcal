@@ -64,7 +64,7 @@ sub date2timestamp {
 			 month      => $date[1],
 			 day        => $date[0],
 			 hour       => $time[0],
-			 minute     => $time[1],
+			 minute     => ($time[1] or 0),
 			 second     => 0,
 			 time_zone  => 'local',
 			);
