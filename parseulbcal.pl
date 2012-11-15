@@ -82,9 +82,6 @@ sub date2timestamp {
   return $dt->strftime($format);
 }
 
-print "Hello World!";
-
-
 sub show_help_and_exit {
   printf STDERR << "EOF";
 $0 analyzes the HTML soup from
