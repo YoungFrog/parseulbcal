@@ -2,6 +2,8 @@
 use strict;
 use warnings; # redondant ?
 use HTML::TreeBuilder;
+binmode STDOUT, ":utf8"; # spit utf8 to terminal
+use utf8; # allow for utf8 inside the code.
 # use Data::ICal;
 # use Data::ICal::Entry::Event;
 # use diagnostics;
@@ -40,7 +42,16 @@ foreach ($tree->find("tr")) {
   my $date = shift @_;
   $date = $date->as_text();
   next unless $date =~ /\d\d\/\d\d\/\d\d\d\d/;
-  $dates{$date} = \[map { $_->as_text() } $_[0]->find("li") ];
+  foreach (map { $_->as_text() } $_[0]->find("li")) {
+    my $timestamp;
+    if (/(\d{2}h(\d{2})?)/ and not /ANNULEE/) { 
+      if ($2) { $timestamp = date2timestamp($date, $1) }
+      else { $timestamp = date2timestamp($date, $1) }
+    }
+    else { $timestamp = date2timestamp($date) }
+    printf "* %s\n", $_;
+    printf "%s\n", $timestamp;
+  }
 }
 
 sub date2timestamp {
