@@ -49,7 +49,7 @@ foreach ($tree->find("tr")) {
       else { $timestamp = date2timestamp($date, $1) }
     }
     else { $timestamp = date2timestamp($date) }
-    printf "* %s\n", $_;
+    printf "** %s\n", $_;
     printf "%s\n", $timestamp;
   }
 }
