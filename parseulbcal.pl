@@ -1,6 +1,6 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 use strict;
-use warnings; # redondant ?
+use warnings;
 use HTML::TreeBuilder;
 binmode STDOUT, ":utf8"; # spit utf8 to terminal
 use utf8; # allow for utf8 inside the code.
@@ -35,14 +35,14 @@ while (defined($_ = shift)) {
 my $tree = HTML::TreeBuilder->new;
 $tree->parse_file($file);
 
-$tree = ($tree->find("table"))[2]; # La table HTML qui contient toutes les dates.
-my %dates;
-foreach ($tree->find("tr")) {
-  @_ = $_->find("td");
-  my $date = shift @_;
+my $subtree = ($tree->find("table"))[2]; # La table HTML qui contient toutes les dates.
+
+foreach my $tr ($subtree->find("tr")) {
+  my @td = $tr->find("td");
+  my $date = shift @td;
   $date = $date->as_text();
   next unless $date =~ /\d\d\/\d\d\/\d\d\d\d/;
-  foreach (map { $_->as_text() } $_[0]->find("li")) {
+  foreach (map { $_->as_text() } $td[0]->find("li")) {
     my $timestamp;
     if (/(\d{2}h(\d{2})?)/ and not /ANNULEE/) { 
       if ($2) { $timestamp = date2timestamp($date, $1) }
@@ -53,6 +53,8 @@ foreach ($tree->find("tr")) {
     printf "%s\n", $timestamp;
   }
 }
+
+$tree->delete();
 
 sub date2timestamp {
   my ($date, $time) = @_;
